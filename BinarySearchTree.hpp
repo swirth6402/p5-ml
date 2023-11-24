@@ -330,7 +330,7 @@ private:
   // NOTE:    This function must run in constant time.
   //          No iteration or recursion is allowed.
   static bool empty_impl(const Node *node) {
-    return node == nullptr || node->datum.empty();
+    return node == nullptr;
   }
 
   // EFFECTS: Returns the size of the tree rooted at 'node', which is the
