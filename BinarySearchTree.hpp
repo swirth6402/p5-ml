@@ -330,7 +330,7 @@ private:
   // NOTE:    This function must run in constant time.
   //          No iteration or recursion is allowed.
   static bool empty_impl(const Node *node) {
-    assert(false);
+    return node == nullptr || node->datum.empty();
   }
 
   // EFFECTS: Returns the size of the tree rooted at 'node', which is the
@@ -338,7 +338,10 @@ private:
   //          tree is 0.
   // NOTE:    This function must be tree recursive.
   static int size_impl(const Node *node) {
-    assert(false);
+    if (node == nullptr) {
+        return 0;
+    }
+    return 1 + size_impl(node->right) + size_impl(node->left);
   }
 
   // EFFECTS: Returns the height of the tree rooted at 'node', which is the
@@ -346,7 +349,10 @@ private:
   //          The height of an empty tree is 0.
   // NOTE:    This function must be tree recursive.
   static int height_impl(const Node *node) {
-    assert(false);
+    if (node == nullptr) {
+        return 0;
+    }
+    return 1 + std::max(height_impl(node->right), height_impl(node->left));
   }
 
   // EFFECTS: Creates and returns a pointer to the root of a new node structure
@@ -354,13 +360,20 @@ private:
   //          tree rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static Node *copy_nodes_impl(Node *node) {
-    assert(false);
+    if (node == nullptr) {
+        return nullptr;
+    }
+    return new Node(node->datum, copy_nodes_impl(node->left), copy_nodes_impl(node->right));
   }
 
   // EFFECTS: Frees the memory for all nodes used in the tree rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static void destroy_nodes_impl(Node *node) {
-    assert(false);
+    if (node != nullptr) {
+        destroy_nodes_impl(node->left);
+        destroy_nodes_impl(node->right);
+        delete node;
+    }
   }
 
   // EFFECTS : Searches the tree rooted at 'node' for an element equivalent
@@ -376,7 +389,14 @@ private:
   //       Two elements A and B are equivalent if and only if A is
   //       not less than B and B is not less than A.
   static Node * find_impl(Node *node, const T &query, Compare less) {
-    assert(false);
+    if (node == nullptr || !(less(node->datum, query) || less(query, node->datum))) {
+      return node;
+    }
+    if (less(node->datum, query)) {
+        return find_impl(node->right, query, less);
+    } else {
+        return find_impl(node->left, query, less);
+    }
   }
 
   // REQUIRES: item is not already contained in the tree rooted at 'node'
