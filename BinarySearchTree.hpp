@@ -464,9 +464,9 @@ private:
         return true;
     }
 
-    if ((less(node->datum, node->left->datum)) ||
-        (less(node->right->datum, node->datum))) {
-        return false;
+    if ((node->left != nullptr && less(node->datum, node->left->datum)) ||
+      (node->right != nullptr && less(node->right->datum, node->datum))) {
+      return false;
     }
 
     return check_sorting_invariant_impl(node->left, less) &&
@@ -521,7 +521,10 @@ private:
 
     if (less(val, node->datum)) {
         Node* left_result = min_greater_than_impl(node->left, val, less);
-        return (left_result != nullptr) ? left_result : node;
+        if (left_result != nullptr) {
+          return left_result;
+          } 
+          else { return node; };
     }
 
     return min_greater_than_impl(node->right, val, less);
