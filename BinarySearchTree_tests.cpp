@@ -30,6 +30,7 @@ TEST(test_comprehensive) {
     ASSERT_TRUE(*tree.min_element() == 0); 
     ASSERT_TRUE(*tree.max_element() == 0); 
     ASSERT_TRUE(tree.min_greater_than(0) == tree.end());
+    ASSERT_TRUE(tree.min_greater_than(-1) != tree.end());
     ASSERT_TRUE(*tree.begin() == 0);
     ASSERT_TRUE(tree.find(8) == tree.end()); 
     ASSERT_TRUE(tree.find(0) != tree.end()); 
@@ -70,6 +71,36 @@ TEST(test_comprehensive) {
     cout << "inorder" << endl;
     cout << oss_inorder.str() << endl << endl;
     ASSERT_TRUE(oss_inorder.str() == "-1 0 3 4 9 ");
+
+    tree.insert(5);
+    ASSERT_TRUE(tree.size() == 6);
+    ASSERT_TRUE(tree.height() == 5);
+
+    tree.insert(10);
+    ASSERT_TRUE(tree.size() ==7);
+    ASSERT_TRUE(tree.height() == 5);
+    ASSERT_TRUE(tree.check_sorting_invariant());
+
+    tree.insert(-2);
+    ASSERT_TRUE(*tree.min_greater_than(-1) == 0);
+    ASSERT_TRUE(*tree.min_greater_than(-3) == -2);
+    ASSERT_TRUE(tree.check_sorting_invariant());
+    ASSERT_TRUE(*tree.min_element() == -2);
+
+    cout << tree.to_string() << endl << endl;
+
+    ostringstream oss_preorder1;
+    tree.traverse_preorder(oss_preorder1);
+    cout << "preorder" << endl;
+    cout << oss_preorder1.str() << endl << endl;
+    ASSERT_TRUE(oss_preorder1.str() == "0 -1 -2 9 3 4 5 10 ");
+
+    ostringstream oss_inorder1;
+    tree.traverse_inorder(oss_inorder1);
+    cout << "inorder" << endl;
+    cout << oss_inorder1.str() << endl << endl;
+    ASSERT_TRUE(oss_inorder1.str() == "-2 -1 0 3 4 5 9 10 ");
+
 }
 
 TEST(test_inorder_preorder_right) {
@@ -192,15 +223,40 @@ TEST(test_copying_and_equality) {
     ASSERT_TRUE(tree3.size() == 7);
     ASSERT_TRUE(tree3.height() == 4);
 
-    ASSERT_TRUE(*tree.max_element() == 4);
-    ASSERT_TRUE(*tree.min_element() == -4);
-    ASSERT_TRUE(*tree.min_greater_than(3) == 4);
-    ASSERT_TRUE(*tree.min_greater_than(0) == 1);
-    ASSERT_TRUE(tree.find(0) != tree.end()); 
-    ASSERT_TRUE(tree.find(7) == tree.end());
-    ASSERT_TRUE(tree.find(-2) == tree.end());
+    ASSERT_TRUE(*tree3.max_element() == 4);
+    ASSERT_TRUE(*tree3.min_element() == -4);
+    ASSERT_TRUE(*tree3.min_greater_than(3) == 4);
+    ASSERT_TRUE(*tree3.min_greater_than(0) == 1);
+    ASSERT_TRUE(tree3.find(0) != tree3.end()); 
+    ASSERT_TRUE(tree3.find(7) == tree3.end());
+    ASSERT_TRUE(tree3.find(-2) == tree3.end());
     
     
+}
+
+TEST(copy){
+//test copy_nodes_impl
+//test destory
+    BinarySearchTree<int> tree;
+    ASSERT_TRUE(tree.min_greater_than(0)== tree.end());
+
+    tree.insert(0);
+    tree.insert(9);
+    tree.insert(3);
+    tree.insert(4);
+    tree.insert(-1);
+    tree.insert(5);
+
+    {
+        BinarySearchTree<int> tree2 = BinarySearchTree(tree);
+        ASSERT_TRUE(tree2.size() == 6);
+        ASSERT_TRUE(tree2.height() == 5);
+        ASSERT_TRUE(tree2.check_sorting_invariant());
+
+    } 
+
+    ASSERT_TRUE(tree.min_greater_than(10)== tree.end());
+
 }
 
 
