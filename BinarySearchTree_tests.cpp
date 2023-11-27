@@ -256,6 +256,9 @@ TEST(copy){
     } 
 
     ASSERT_TRUE(tree.min_greater_than(10)== tree.end());
+    ASSERT_TRUE(tree.check_sorting_invariant());
+    *tree.find(9) = -2;
+    ASSERT_FALSE(tree.check_sorting_invariant());
 
 }
 
