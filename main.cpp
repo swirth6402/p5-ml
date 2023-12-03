@@ -87,14 +87,16 @@ private:
 
        
          //if w occurs but not in that label 
-         else if((postsWLpairs.find(make_pair(label, word)) == postsWLpairs.end() && postswWord.find(word) != postswWord.end())){ // ){
+         else if((postsWLpairs.find(make_pair(label, word)) 
+         == postsWLpairs.end() && postswWord.find(word) != postswWord.end())){ // ){
 
         
                         return log(((double)postswWord[word])/(double)totalPosts); 
                     }
 
         // regular formula 
-        else{ return log((double)postsWLpairs[make_pair(label, word)]/(double)tpostswLabel); }
+        else{ return log((double)postsWLpairs
+        [make_pair(label, word)]/(double)tpostswLabel); }
 
     }
 
@@ -168,7 +170,9 @@ public:
             cout << "vocabulary size = " << vocabularySize << endl<<endl; 
             cout << "classes:" << endl; 
             for (const auto &label : allLabels) {
-                cout << "  "<< label << ", " << postswLabel[label] << " examples, log-prior = " << logPriorProb(label) << endl;
+                cout << "  "<< label << ", " << postswLabel[label] 
+                << " examples, log-prior = " << logPriorProb(label) 
+                << endl;
             }
             
             
@@ -178,8 +182,14 @@ public:
             cout << "classifier parameters:" << endl;
                 for (const auto &label : allLabels) {
                 for(const auto &word : allWords){
-                    if (debug == true && (postsWLpairs.find(make_pair(label, word)) != postsWLpairs.end())){ 
-                        cout << "  " << label << ":" << word << ", count = " << postsWLpairs[make_pair(label,word)] << ", " << "log-likelihood = " << logLikelihood(label, word) << endl;
+                    if (debug == true && 
+                    (postsWLpairs.find(make_pair(label, word)) 
+                    != postsWLpairs.end())){ 
+                        cout << "  " << label << ":" 
+                        << word << ", count = " 
+                        << postsWLpairs[make_pair(label,word)] 
+                        << ", " << "log-likelihood = " 
+                        << logLikelihood(label, word) << endl;
                     }
                 
                 }
@@ -254,7 +264,8 @@ public:
 
 
             
-            cout << "  correct = " << row["tag"] << ", predicted = " << bestLabel << ", log-probability score = " << bestProb << endl; 
+            cout << "  correct = " << row["tag"] << ", predicted = " 
+            << bestLabel << ", log-probability score = " << bestProb << endl; 
             cout << "  content = " << row["content"] << endl << endl; 
             
     
@@ -264,7 +275,8 @@ public:
 
         }
 
-        cout<< "performance: " << accuracyCount << " / " << testingCount << " posts predicted correctly" << endl;
+        cout<< "performance: " << accuracyCount << " / " << 
+        testingCount << " posts predicted correctly" << endl;
 
     }
     
@@ -458,7 +470,8 @@ private:
 
     //For each label C and word w, the number of posts with label C that contain w
 
-    map <pair<string,string>, int> labeledPostswWord(const string &filename, const string &word, const string &label){
+    map <pair<string,string>, int> labeledPostswWord(const 
+    string &filename, const string &word, const string &label){
 
         csvstream csvin(filename);
         
@@ -534,7 +547,8 @@ public:
         //find number of posts with label word pairs 
         for (const auto &label : allLabels) {
             for (const auto &word : allWords) {
-                postsWLpairs[make_pair(label, word)] = labeledPostswWord(filename, word, label)[make_pair(label, word)]; 
+                postsWLpairs[make_pair(label, word)] = 
+        labeledPostswWord(filename, word, label)[make_pair(label, word)]; 
             }
         }
 
@@ -544,7 +558,8 @@ public:
             cout << "vocabulary size = " << vocabularySize << endl<<endl; 
             cout << "classes:" << endl; 
             for (const auto &label : allLabels) {
-                cout << "  "<< label << ", " << postswLabel[label] << " examples, log-prior = " << logPriorProb(label) << endl;
+                cout << "  "<< label << ", " << postswLabel[label] << " 
+                examples, log-prior = " << logPriorProb(label) << endl;
             }
             cout << "classifier parameters:" << endl; 
 
@@ -601,14 +616,16 @@ public:
                     }
 
                     //if w occurs but not in that label 
-                    else if(postsWLpairs.find(make_pair(label, word)) == postsWLpairs.end()){
+                    else if(postsWLpairs.find(make_pair(label, word)) == 
+                    postsWLpairs.end()){
                         prob += log((postswWord[word])/(double)totalPosts); 
                     }
                     // regular formula 
                     else{
                         int whatever = postsWLpairs[make_pair(label, word)]; 
                         cout<< whatever << endl; 
-                        prob += log(postsWLpairs[make_pair(label, word)]/(double)tpostswLabel);
+                        prob += log(postsWLpairs[make_pair(label, word)]/
+                        (double)tpostswLabel);
                     }
                    
                 }
@@ -621,7 +638,8 @@ public:
             }
             
             
-            cout << "  correct = " << row["tag"] << ", predicted = " << bestLabel << ", log-probability score = " << bestProb << endl; 
+            cout << "  correct = " << row["tag"] << ", predicted = " 
+            << bestLabel << ", log-probability score = " << bestProb << endl; 
             cout << "  content = " << row["content"] << endl << endl; 
             
             
@@ -632,7 +650,8 @@ public:
                 }
 
         }
-        cout<< "performance: " << accuracyCount<< " / " << countPosts(filename) << " posts predicted correctly" << endl;
+        cout<< "performance: " << accuracyCount<< " / " << 
+        countPosts(filename) << " posts predicted correctly" << endl;
     }
     
 };
