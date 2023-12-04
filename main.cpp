@@ -251,7 +251,7 @@ public:
                     prob += logLikelihood(label, word);
 
                 }
-                //************************************************************************************************************
+                //******************************************************
                 //find what is the correct decision if prob = bestProb
                 if (prob > bestProb){
                     bestLabel = label; 
