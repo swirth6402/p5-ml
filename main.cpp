@@ -251,10 +251,8 @@ public:
                     prob += logLikelihood(label, word);
 
                 }
-            
-                
-         
-
+                //************************************************************************************************************
+                //find what is the correct decision if prob = bestProb
                 if (prob > bestProb){
                     bestLabel = label; 
                     bestProb = prob;  
@@ -314,20 +312,21 @@ int main(int argc, char *argv[]) {
        debug = true; 
     } 
     
-
-    //TRY TO OPEN FILES HERE!!!
-    csvstream csvin_train(trainingFilename);
-    //if (!csvin_train.is_open()){
-       // cout << "Error opening file: " << trainingFilename << endl;
-       // return -1; 
-   // }
+    try{
+        csvstream csvin_train(trainingFilename);
+    }
+    catch(const csvstream_exception &e){
+        cout << e.what() << endl;
+        return 1;
+    }
     
-
-    csvstream csvin_test(testingFilename);
-    //if (!csvin_test.is_open()){
-   //     cout << "Error opening file: " << testingFilename << endl;
-    //    return -1; 
-   // }
+    try{
+        csvstream csvin_test(testingFilename);
+    }
+    catch(const csvstream_exception &e){
+        cout << e.what() << endl;
+        return 1; 
+    }
 
     classifier.training(argv[1],debug); 
     classifier.testing(argv[2],debug); 
